@@ -1,0 +1,10 @@
+test:
+  adapter: postgresql
+  <% if ENV["DATABASE_URL"] %>
+  url: <%= ENV["DATABASE_URL"] %>
+  <% else %>
+  database: active_record-updated_at
+  encoding: unicode
+  pool: 5
+  username: <%= ENV.fetch("USER") %>
+  <% end %>
