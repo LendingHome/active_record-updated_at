@@ -11,7 +11,7 @@ module ActiveRecord
       def update_all_with_updated_at(query, *args, &block)
         attribute_exists = column_names.include?("updated_at")
         already_specified = Array(query).flatten.grep(/\bupdated_at\b/).any?
-        updated_at = Time.current #.iso8601(6)
+        updated_at = Time.current
 
         if attribute_exists && !already_specified
           case query

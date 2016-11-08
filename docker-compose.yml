@@ -4,7 +4,6 @@ services:
   app:
     build:
       context: "."
-    image: $DOCKER_IMAGE
     depends_on:
       - postgres
     environment:
@@ -12,9 +11,11 @@ services:
       - CODECLIMATE_REPO_TOKEN=8102620cfe1d55b13fb97eb60f07bcc4e665dbfdb681bc9c98d6ae0539b29456
       - DATABASE_URL=postgres://postgres@postgres/active_record-updated_at
       - DOCKER=true
+      - PGTZ=UTC
       - RACK_ENV=test
       - RAILS_ENV=test
       - REBUILD_CACHE
+      - TZ=UTC
     links:
       - postgres
     volumes:
@@ -24,6 +25,8 @@ services:
 
   postgres:
     image: lendinghome/postgres:9.4.8
+    environment:
+      - TZ=UTC
 
   rubocop:
     image: lendinghome/rubocop

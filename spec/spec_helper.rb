@@ -15,8 +15,9 @@ Combustion.initialize!(:active_record)
 require "rspec/rails"
 RSpec::Expectations.configuration.on_potential_false_positives = :nothing
 
+require "timecop"
+
 RSpec.configure do |config|
-  config.include ActiveSupport::Testing::TimeHelpers
   config.filter_run :focus
   config.raise_errors_for_deprecations!
   config.run_all_when_everything_filtered = true

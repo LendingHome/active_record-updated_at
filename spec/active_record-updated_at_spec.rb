@@ -7,15 +7,15 @@ RSpec.describe ActiveRecord::UpdatedAt do
   describe "#update_all" do
     context "with an array" do
       it "touches updated_at" do
-        travel_to(timestamp) { User.update_all(["name = ?", "changed"]) }
+        Timecop.freeze(timestamp) { User.update_all(["name = ?", "changed"]) }
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at if already specified" do
         User.update_all(["name = ?, updated_at = ?", "changed", timestamp])
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at with workaround method" do
@@ -27,15 +27,15 @@ RSpec.describe ActiveRecord::UpdatedAt do
 
     context "with a hash" do
       it "touches updated_at" do
-        travel_to(timestamp) { User.update_all(name: "changed") }
+        Timecop.freeze(timestamp) { User.update_all(name: "changed") }
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at if already specified" do
         User.update_all(name: "changed", updated_at: timestamp)
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at with workaround method" do
@@ -47,16 +47,16 @@ RSpec.describe ActiveRecord::UpdatedAt do
 
     context "with a string" do
       it "touches updated_at" do
-        travel_to(timestamp) { User.update_all("name = 'changed'") }
+        Timecop.freeze(timestamp) { User.update_all("name = 'changed'") }
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at if already specified" do
         formatted_timestamp = timestamp.iso8601(6)
         User.update_all("name = 'changed', updated_at = '#{formatted_timestamp}'")
         expect(reloaded.name).to eq("changed")
-        expect(reloaded.updated_at).to eq(timestamp)
+        expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
       end
 
       it "does not touch updated_at with workaround method" do
@@ -69,14 +69,14 @@ RSpec.describe ActiveRecord::UpdatedAt do
 
   describe "#update_column" do
     it "touches updated_at" do
-      travel_to(timestamp) { user.update_column(:name, "changed") }
+      Timecop.freeze(timestamp) { user.update_column(:name, "changed") }
       expect(reloaded.name).to eq("changed")
-      expect(reloaded.updated_at).not_to eq(timestamp)
+      expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
     end
 
     it "does not touch updated_at if already specified" do
       user.update_column(:updated_at, timestamp)
-      expect(reloaded.updated_at).to eq(timestamp)
+      expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
     end
 
     it "does not touch updated_at with workaround method" do
@@ -88,15 +88,15 @@ RSpec.describe ActiveRecord::UpdatedAt do
 
   describe "#update_columns" do
     it "touches updated_at" do
-      travel_to(timestamp) { user.update_columns(name: "changed") }
+      Timecop.freeze(timestamp) { user.update_columns(name: "changed") }
       expect(reloaded.name).to eq("changed")
-      expect(reloaded.updated_at).not_to eq(timestamp)
+      expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
     end
 
     it "does not touch updated_at if already specified" do
       user.update_columns(name: "changed", updated_at: timestamp)
       expect(reloaded.name).to eq("changed")
-      expect(reloaded.updated_at).to eq(timestamp)
+      expect(reloaded.updated_at.to_s).to eq(timestamp.to_s)
     end
 
     it "does not touch updated_at with workaround method" do
