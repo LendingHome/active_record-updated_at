@@ -1,19 +1,13 @@
 module ActiveRecord
   module UpdatedAt
     module Relation
-      extend ActiveSupport::Concern
-
-      included do
-        alias_method :update_all_without_updated_at, :update_all
-        alias_method :update_all, :update_all_with_updated_at
-      end
-
-      def update_all_with_updated_at(query, *args, &block)
+      def update_all(query, *args, &block)
         attribute_exists = column_names.include?("updated_at")
         already_specified = Array(query).flatten.grep(/\bupdated_at\b/).any?
+        enabled = UpdatedAt.enabled?
         updated_at = Time.current
 
-        if attribute_exists && !already_specified
+        if attribute_exists && !already_specified && enabled
           case query
           when Array
             query.first << ", updated_at = ?"
@@ -25,7 +19,7 @@ module ActiveRecord
           end
         end
 
-        update_all_without_updated_at(query, *args, &block)
+        super
       end
     end
   end

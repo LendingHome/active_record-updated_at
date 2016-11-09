@@ -19,11 +19,11 @@ The default `ActiveRecord` behavior does not touch `updated_at` when the followi
 * `ActiveRecord::Base#update_columns`
 * `ActiveRecord::Relation#update_all`
 
-We **rarely ever have a case to modify data WITHOUT touching `updated_at`** so this gem enables the touching behavior by default. For those rare occassions that we don't want the touching we can call these alternative methods to explicitly disable it:
+We **rarely ever have a case to modify data WITHOUT touching `updated_at`** so this gem enables the touching behavior by default. For those rare occassions that we don't want the touching we can wrap these calls in a `disable` block explicitly:
 
-* `ActiveRecord::Base#update_column_without_updated_at`
-* `ActiveRecord::Base#update_columns_without_updated_at`
-* `ActiveRecord::Relation#update_all_without_updated_at`
+```ruby
+ActiveRecord::UpdatedAt.disable { User.update_all(role: "member") }
+```
 
 **If `updated_at` is explicitly specified then the UPDATE query is not modified**.
 
@@ -38,7 +38,7 @@ User.update_all(role: "member", updated_at: 1.day.ago)
 User.update_all(role: "member", updated_at: nil)
 
 # This doesn't touch `updated_at`
-User.update_all_without_updated_at(role: "member")
+ActiveRecord::UpdatedAt.disable { User.update_all(role: "member") }
 ```
 
 ## Testing
