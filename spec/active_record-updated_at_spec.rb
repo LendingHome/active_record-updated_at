@@ -4,6 +4,20 @@ RSpec.describe ActiveRecord::UpdatedAt do
   let!(:user) { User.create!(name: "test") }
   let!(:timestamp) { 1.day.ago }
 
+  describe "#enabled" do
+    it "can be nested with disable blocks" do
+      expect(described_class).to be_enabled
+
+      described_class.disable do
+        expect(described_class).not_to be_enabled
+        described_class.enable { expect(described_class).to be_enabled }
+        expect(described_class).not_to be_enabled
+      end
+
+      expect(described_class).to be_enabled
+    end
+  end
+
   describe "#update_all" do
     context "with an array" do
       it "touches updated_at" do
@@ -19,7 +33,7 @@ RSpec.describe ActiveRecord::UpdatedAt do
       end
 
       it "does not touch updated_at with workaround method" do
-        User.update_all_without_updated_at(["name = ?", "changed"])
+        described_class.disable { User.update_all(["name = ?", "changed"]) }
         expect(reloaded.name).to eq("changed")
         expect(reloaded.updated_at).to eq(user.updated_at)
       end
@@ -39,7 +53,7 @@ RSpec.describe ActiveRecord::UpdatedAt do
       end
 
       it "does not touch updated_at with workaround method" do
-        User.update_all_without_updated_at(name: "changed")
+        described_class.disable { User.update_all(name: "changed") }
         expect(reloaded.name).to eq("changed")
         expect(reloaded.updated_at).to eq(user.updated_at)
       end
@@ -60,7 +74,7 @@ RSpec.describe ActiveRecord::UpdatedAt do
       end
 
       it "does not touch updated_at with workaround method" do
-        User.update_all_without_updated_at("name = 'changed'")
+        described_class.disable { User.update_all("name = 'changed'") }
         expect(reloaded.name).to eq("changed")
         expect(reloaded.updated_at).to eq(user.updated_at)
       end
@@ -80,7 +94,7 @@ RSpec.describe ActiveRecord::UpdatedAt do
     end
 
     it "does not touch updated_at with workaround method" do
-      user.update_column_without_updated_at(:name, "changed")
+      described_class.disable { user.update_column(:name, "changed") }
       expect(reloaded.name).to eq("changed")
       expect(reloaded.updated_at).to eq(user.updated_at)
     end
@@ -100,7 +114,7 @@ RSpec.describe ActiveRecord::UpdatedAt do
     end
 
     it "does not touch updated_at with workaround method" do
-      user.update_columns_without_updated_at(name: "changed")
+      described_class.disable { user.update_columns(name: "changed") }
       expect(reloaded.name).to eq("changed")
       expect(reloaded.updated_at).to eq(user.updated_at)
     end
