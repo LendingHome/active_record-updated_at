@@ -19,7 +19,7 @@ The default `ActiveRecord` behavior does not touch `updated_at` when the followi
 * `ActiveRecord::Base#update_columns`
 * `ActiveRecord::Relation#update_all`
 
-We **rarely ever have a case to modify data WITHOUT touching `updated_at`** so this gem enables the touching behavior by default. For those rare occassions that we don't want the touching we can wrap these calls in a `disable` block explicitly:
+We **rarely ever have a case to modify data WITHOUT touching `updated_at`** so this gem enables the touching behavior by default. For those rare occasions that we don't want the touching we can wrap these calls in a `disable` block explicitly:
 
 ```ruby
 ActiveRecord::UpdatedAt.disable { User.update_all(role: "member") }
