@@ -5,13 +5,15 @@ module ActiveRecord
   module UpdatedAt
     ActiveRecord::Relation.send(:prepend, Relation)
 
+    STATE = "#{name}::DISABLED".freeze
+
     class << self
       def disable(state = true)
-        disabled_was = @disabled
-        @disabled = state
+        disabled_was = Thread.current[STATE]
+        Thread.current[STATE] = state
         yield
       ensure
-        @disabled = disabled_was
+        Thread.current[STATE] = disabled_was
       end
 
       def enable(&block)
@@ -19,7 +21,7 @@ module ActiveRecord
       end
 
       def enabled?
-        !@disabled
+        !Thread.current[STATE]
       end
     end
   end
