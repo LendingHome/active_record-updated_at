@@ -1,7 +1,7 @@
 # ![LendingHome](https://cloud.githubusercontent.com/assets/2419/19467866/7efa93a8-94c8-11e6-93e7-4375dbb8a7bc.png) active_record-updated_at
 [![Code Climate](https://codeclimate.com/github/LendingHome/active_record-updated_at/badges/gpa.svg)](https://codeclimate.com/github/LendingHome/active_record-updated_at) [![Coverage](https://codeclimate.com/github/LendingHome/active_record-updated_at/badges/coverage.svg)](https://codeclimate.com/github/LendingHome/active_record-updated_at) [![Gem Version](https://badge.fury.io/rb/active_record-updated_at.svg)](http://badge.fury.io/rb/active_record-updated_at)
 
-> Touch `updated_at` by default with calls to `update_column(s)` and `update_all`
+> Touch `updated_at` by default with calls to `update_all` and `update_column(s)`
 
 ## Installation
 
