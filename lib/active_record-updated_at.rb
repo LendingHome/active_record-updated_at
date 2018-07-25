@@ -1,8 +1,10 @@
 require "active_record"
+require_relative "active_record/updated_at/persistence"
 require_relative "active_record/updated_at/relation"
 
 module ActiveRecord
   module UpdatedAt
+    ActiveRecord::Persistence.send(:include, Persistence)
     ActiveRecord::Relation.send(:include, Relation)
 
     STATE = "#{name}::DISABLED".freeze

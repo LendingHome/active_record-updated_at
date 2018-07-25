@@ -1,10 +1,5 @@
-if ENV["CODECLIMATE_REPO_TOKEN"]
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
-else
-  require "simplecov"
-  SimpleCov.start { add_filter("/vendor/bundle/") }
-end
+require "simplecov"
+SimpleCov.start { add_filter("/vendor/bundle/") }
 
 require File.expand_path("../../lib/active_record-updated_at", __FILE__)
 ActiveRecord::Migration.verbose = false
